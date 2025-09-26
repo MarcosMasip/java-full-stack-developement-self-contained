@@ -110,6 +110,7 @@ macOS/Linux (deploy to Tomcat)
 - LoginForm (no DB): `bash scripts/webapp_build_deploy.sh "LoginForm" loginform` → http://localhost:8080/loginform/
 - labsheet7 (no DB): `bash scripts/webapp_build_deploy.sh "labsheet7" lab7` → http://localhost:8080/lab7/
 - Calculator (static): `bash scripts/webapp_build_deploy.sh "Calculator" calc` → http://localhost:8080/calc/
+ - Labsheet 6: `bash scripts/webapp_build_deploy.sh "labsheet6" lab6` → http://localhost:8080/lab6/
 
 Windows PowerShell
 - Use: `powershell -ExecutionPolicy Bypass -File .\scripts\exp5_build_deploy.ps1 -TomcatHome "$env:CATALINA_HOME"` for Experiment 5
@@ -183,6 +184,7 @@ Manual build (if you prefer explicit commands)
 Using the Calculator demo
 - Deploy: copy `Calculator/src/main/webapp` to your Tomcat webapps directory (e.g., `webapps/calc`)
 - Visit: http://localhost:8080/calc/
+	- Note: A default `index.html` is included, so the root URL works
 
 Stopping services
 - Tomcat (macOS/Homebrew): `brew services stop tomcat@10`
