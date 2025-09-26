@@ -197,6 +197,69 @@ Troubleshooting
 - DB connection issues: ensure Docker is running and `scripts/mysql_up.sh` completed successfully
 
 -------------------------------------------------------------------------------
+Shut down and clean up (stop services, remove deploys) 🧹
+-------------------------------------------------------------------------------
+
+When you’re done, you can stop everything and clean up your machine. Use the commands for your OS/shell.
+
+macOS (Homebrew) / Linux (bash/zsh)
+```bash
+# 1) Stop Tomcat
+brew services stop tomcat@10 2>/dev/null || true
+
+# 2) Remove deployed webapps from Tomcat
+#    Adjust the list if you deployed a subset
+CONTEXTS=(exp5 exp6 exp7 lab5 lab6 lab7 loginform regform calc sreg allcompo)
+if command -v brew >/dev/null 2>&1; then
+	TOMCAT_HOME="$(brew --prefix tomcat@10)/libexec"
+else
+	# For Linux: set CATALINA_HOME earlier, reuse it here
+	TOMCAT_HOME="${CATALINA_HOME:-/path/to/apache-tomcat-10.x.x}"
+fi
+for ctx in "${CONTEXTS[@]}"; do
+	rm -rf "$TOMCAT_HOME/webapps/$ctx"
+done
+
+# 3) Stop and remove local MySQL container
+docker stop mysql-3308 2>/dev/null || true
+docker rm   mysql-3308 2>/dev/null || true
+
+# Optional: remove image cache to free space
+# docker rmi mysql:8.0 2>/dev/null || true
+
+# Optional: clean compiled classes in this repo (safe; sources remain)
+find . -type d -path '*/src/main/webapp/WEB-INF/classes' -exec rm -rf {} +
+```
+
+Windows (PowerShell)
+```powershell
+# 1) Stop Tomcat (if you run it manually)
+# & "$env:CATALINA_HOME\bin\shutdown.bat"
+
+# 2) Remove deployed webapps from Tomcat
+$apps = "exp5","exp6","exp7","lab5","lab6","lab7","loginform","regform","calc","sreg","allcompo"
+foreach ($a in $apps) {
+	$p = Join-Path $env:CATALINA_HOME "webapps\$a"
+	if (Test-Path $p) { Remove-Item -Recurse -Force $p }
+}
+
+# 3) Stop and remove local MySQL container
+docker stop mysql-3308 2>$null | Out-Null
+docker rm   mysql-3308 2>$null | Out-Null
+
+# Optional: remove image cache to free space
+# docker rmi mysql:8.0 2>$null | Out-Null
+
+# Optional: clean compiled classes in this repo (safe)
+Get-ChildItem -Recurse -Directory -Filter classes | Where-Object { $_.FullName -like '*src\main\webapp\WEB-INF\classes' } | Remove-Item -Recurse -Force
+```
+
+Notes
+- If Tomcat was started via scripts or manually (Linux/Windows), use `bin/shutdown.sh` (or `shutdown.bat`) instead of Homebrew.
+- If ports 8080 or 3308 remain busy, confirm no other processes are bound to them before restarting.
+- The cleanup only removes deployed artifacts and containers; your source code stays intact.
+
+-------------------------------------------------------------------------------
 What’s included in this repo
 -------------------------------------------------------------------------------
 - Experiment 5 (JSP/Servlets + MySQL) — full-stack example you just ran
