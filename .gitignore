@@ -1,0 +1,10 @@
+# Ignore build outputs inside webapps
+**/src/main/webapp/WEB-INF/classes/
+
+# macOS metadata
+.DS_Store
+
+# IDEs/editors
+.idea/
+.vscode/
+*.iml
