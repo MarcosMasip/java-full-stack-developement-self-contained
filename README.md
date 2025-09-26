@@ -1,113 +1,139 @@
-# java-full-stack-developement  
-## 🗒️ Description     
-    
-This advanced-level repository equips learners with the necessary skills to excel in full-stack development using Java, with a focus on fostering employability skills. learners will delve into the key technologies integral to full-stack development, primarily centered around Java and its associated tools and frameworks such as Java EE, Java Persistence, Hibernate, Maven, and Spring Core. Upon successful completion of the repository, learners will be well-prepared to pursue a career in full-stack development, armed with a comprehensive understanding of Java-based technologies and problem-solving capabilities.
+# java-full-stack-developement (self-contained)
 
-## Content's 
-## Calculator _(HTML, CSS, Java)_      
-![alt text](https://github.com/AkashKobal/java-full-stack-developement/blob/main/Calculator/output.png)      
- 
- 
-## What you'll learn  
-- Build a fully functioning web application through a simplistic step from a professional trainer<br>  
-- Java programming language 
-- Learn Java server pages, servlets, and JSTL from the basics to advance
-- Understand building web forms with JSP  
-- Apply validations on the forms
-- Use the web template to make the web application incredible 
-- Create-Deploy Servlets & Understand Servlet Lifecycle 
-- Learn how to Handle Session in JSP
-- Develop Dynamic Web Applications
-- Learn MVC in JSP
-- Forms under JSP and Servlets
-- Collection
-- Learn the concept related to Generics
-- Add validations on form data
-- Adding records into the database
-- Updating record(s) into database
-- Deleting record(s) into database
-- Spring Framework
-- Web Services – RestFul API
-- Spring Boot
-- Spring Boot Restful API
-- JavaScript
+This repo is now fully runnable locally (macOS, Linux, Windows) with no external API calls.
 
-## Repository Overview
-### Java Fundamentals
+What you get
+- A working full-stack Java web app (Experiment 5: JSP/Servlets + MySQL) you can run locally
+- Static demo (Calculator)
+- Several Java console experiments
 
-- Explore the intricacies of decision-making in Java.
-- Master object-oriented programming concepts for efficient code organization.
-- Dive into the powerful Collections framework and debugging techniques.
-- Harness the flexibility of Generics for enhanced code reusability.
-- Conquer the complexities of multi-threading and understand Lambdas for concise, functional programming.
-- Gain proficiency in file handling to manage data seamlessly.
+We use Tomcat 10+ (Jakarta Servlet) and MySQL in Docker for portability. Everything runs on your machine; no cloud accounts needed.
 
-### Web Development with JSP and Servlets
+-------------------------------------------------------------------------------
+Quick start (copy/paste)
+-------------------------------------------------------------------------------
 
-- Learn to build interactive web forms using JSP.
-- Implement form validations for a seamless user experience.
-- Develop and deploy Java Servlets for dynamic web applications.
-- Understand session management in JSP for enhanced user interactions.
-- Explore database integration: add, update, and delete records effortlessly.
-- Master the art of image and file uploads for versatile web applications.
+macOS or Linux
+1) Install Java + Tomcat 10 + Docker
+	- Java: ensure `java -version` prints a version (OpenJDK 17+ recommended)
+	- macOS: `brew install --cask temurin && brew install tomcat@10`
+	- Linux: use your package manager for Java; download Tomcat 10 from tomcat.apache.org and unzip; set CATALINA_HOME
+	- Docker Desktop (macOS/Windows) or Docker Engine (Linux)
 
-### Hibernate for Database Operations
+2) Start Tomcat
+	macOS (Homebrew):
+	- Start: `brew services start tomcat@10`
+	- Tomcat home (used below): `export TOMCAT_LIBEXEC="$(brew --prefix tomcat@10)/libexec"`
 
-- Establish a robust connection between Hibernate and databases.
-- Delve into Hibernate Query Language (HQL) basics.
-- Perform CRUD operations seamlessly with Hibernate.
+	Linux/Windows: define Tomcat home
+	- Linux: `export CATALINA_HOME=/path/to/apache-tomcat-10.x.x`
+	- Windows PowerShell: `$env:CATALINA_HOME='C:\\path\\to\\apache-tomcat-10.x.x'`
 
-### Spring Framework & REST API Overview
+	Verify: open http://localhost:8080 (Tomcat welcome page)
 
-- Grasp the concept of Inversion of Control (IoC) for flexible application architecture.
-- Dive into Spring Beans for modular and scalable development.
-- Utilize resource-based URIs for CRUD methods and handle JSON responses.
-- Implement HATEOAS principles for resource discoverability.
-- Ensure the idempotence of HTTP methods for robust APIs.
+3) Start local MySQL (Docker) and create tables
+	macOS/Linux:
+	- `bash scripts/mysql_up.sh`
 
-### Spring Boot Mastery
+	Windows PowerShell:
+	- Run Docker Desktop, then:
+	  ```powershell
+	  docker run --name mysql-3308 -e MYSQL_ROOT_PASSWORD='Akash@123' -p 3308:3306 -d mysql:8.0
+	  docker exec -i mysql-3308 mysql -uroot -pAkash@123 @"-" <<'SQL'
+	  CREATE DATABASE IF NOT EXISTS module2;
+	  USE module2;
+	  CREATE TABLE IF NOT EXISTS studentMarks (
+		 rollno INT PRIMARY KEY,
+		 name VARCHAR(255),
+		 section VARCHAR(10),
+		 sub1 INT, sub2 INT, sub3 INT, sub4 INT, sub5 INT, sub6 INT,
+		 lab1 INT, lab2 INT
+	  );
+	  SQL
+	  ```
 
-- Navigate the seamless transition from Spring Boot 2.7 to Spring Boot 3 migrations.
-- Enhance your applications by integrating Spring Security, Thymeleaf tags, and Restful APIs into Spring Boot projects.
-- Implement validations in the Register Form and introduce a sleek Profile page on the Blog application.
-- Incorporate user account support to elevate your Spring applications.
-- Implement JWT token generation for secure authentication.
-- Integrate the H2 database seamlessly.
-- Explore web template integration for polished user interfaces.
-- Strengthen application security with Spring Security and Bcrypt password hashing.
-- Develop functionalities like profile updates and password reset emails.
+4) Build and deploy the Experiment 5 web app
+	macOS/Linux:
+	- `bash scripts/exp5_build_deploy.sh`
 
-### JavaScript
-- Master keywords and data types in JavaScript.
-- Differentiate between normal functions and expression functions.
-- Harness the power of forEach method for efficient array processing.
-- Gain proficiency in DOM manipulation and understand callback functions.
+	Windows PowerShell:
+	- `powershell -ExecutionPolicy Bypass -File .\scripts\exp5_build_deploy.ps1 -TomcatHome "$env:CATALINA_HOME"`
 
-### JUnit :
-- Gain a solid understanding of the fundamentals of the JUnit testing framework.
-- Learn how to structure and implement effective JUnit test methods for robust and reliable testing.
-- Explore techniques for testing exceptions, ensuring your code handles unexpected scenarios seamlessly.
+5) Use the app (in your browser)
+	- Insert marks: http://localhost:8080/exp5/Insert.jsp (submit a row; expect "Successfully Inserted")
+	- Search marks: http://localhost:8080/exp5/Search.jsp (enter rollno; see a table with Pass/Fail)
 
-### Micro-Web Services and JSTL:
-- Dive into the legacy content of micro-web services, exploring both basic and advanced concepts.
-- Master the intricacies of JavaServer Pages Standard Tag Library (JSTL) for efficient web development.
+That’s it. The app is running entirely locally.
 
-### Bonus Modules:
-- Explore Docker and WSL on Windows for containerized development.
-- Implement OAuth2 with JWT token generation for secure authentication.
-- Develop Album API with Spring Boot.
+-------------------------------------------------------------------------------
+Details and extras
+-------------------------------------------------------------------------------
 
-### Key Learning Objectives
-- Java Fundamentals: Master core Java concepts, including multi-threading, Lambdas, Collections framework, and file handling.
-- Hibernate: Explore Hibernate, learn to build applications using JSP and Hibernate, and perform CRUD operations.
-- Spring Framework: Dive into the Spring framework, covering Inversion of Control, Dependency Injection, and more.
-- Spring Boot: Gain in-depth knowledge of Spring Boot, covering migrations, security integration, Thymeleaf tags, and Restful API implementation.
-- JavaScript Basics: Understand essential JavaScript concepts, including objects, loops, decision-making, array methods, and asynchronous JavaScript.
+Prerequisites
+- Java JDK 11+ (17+ recommended)
+- Tomcat 10+ (Jakarta Servlet)
+- Docker (to run MySQL locally, no external service required)
 
-### Repository Features
-- Understand the end-to-end process of building web forms with JSP and Servlets.
-- Acquire a strong foundation in object-oriented programming, covering core concepts, method parameters, return types, arrays, collections, and debugging.
-- Implement sessions in JSP for efficient web application management.
-- Apply a wide range of concepts to projects, allowing you to practice and reinforce your new skills.
+Helper scripts (macOS/Linux)
+- `scripts/mysql_up.sh` — starts MySQL 8 on port 3308 in Docker and creates the required databases/tables
+- `scripts/exp5_build_deploy.sh` — compiles servlets and deploys Experiment 5 to Tomcat
 
-This README serves as a comprehensive guide for learners enrolled in the repository, outlining the curriculum's objectives, technologies covered, and skills developed throughout the program.
+Helper script (Windows)
+- `scripts/exp5_build_deploy.ps1` — compiles and deploys Experiment 5 (pass `-TomcatHome` or set `CATALINA_HOME`/`TOMCAT_HOME`)
+
+Manual build (if you prefer explicit commands)
+1) On macOS with Homebrew Tomcat:
+	```zsh
+	export TOMCAT_LIBEXEC="$(brew --prefix tomcat@10)/libexec"
+	mkdir -p "EXPERIMENT 5/src/main/webapp/WEB-INF/classes"
+	cd "EXPERIMENT 5"
+	find src/main/java -name "*.java" -print0 | xargs -0 javac \
+	  -cp "$TOMCAT_LIBEXEC/lib/servlet-api.jar:src/main/webapp/WEB-INF/lib/mysql-connector-j-8.3.0.jar" \
+	  -d src/main/webapp/WEB-INF/classes
+	rsync -a src/main/webapp/ "$TOMCAT_LIBEXEC/webapps/exp5/"
+	cd -
+	```
+
+2) On Linux with a downloaded Tomcat:
+	```bash
+	export CATALINA_HOME=/path/to/apache-tomcat-10.x.x
+	mkdir -p "EXPERIMENT 5/src/main/webapp/WEB-INF/classes"
+	cd "EXPERIMENT 5"
+	find src/main/java -name "*.java" -print0 | xargs -0 javac \
+	  -cp "$CATALINA_HOME/lib/servlet-api.jar:src/main/webapp/WEB-INF/lib/mysql-connector-j-8.3.0.jar" \
+	  -d src/main/webapp/WEB-INF/classes
+	rsync -a src/main/webapp/ "$CATALINA_HOME/webapps/exp5/"
+	cd -
+	```
+
+3) On Windows PowerShell:
+	```powershell
+	$env:CATALINA_HOME='C:\\path\\to\\apache-tomcat-10.x.x'
+	New-Item -ItemType Directory -Force -Path 'EXPERIMENT 5\src\main\webapp\WEB-INF\classes' | Out-Null
+	$sources = Get-ChildItem -Path 'EXPERIMENT 5\src\main\java' -Recurse -Filter *.java | ForEach-Object { $_.FullName }
+	javac -cp "$env:CATALINA_HOME\lib\servlet-api.jar;EXPERIMENT 5\src\main\webapp\WEB-INF\lib\mysql-connector-j-8.3.0.jar" -d 'EXPERIMENT 5\src\main\webapp\WEB-INF\classes' @sources
+	robocopy 'EXPERIMENT 5\src\main\webapp' "$env:CATALINA_HOME\webapps\exp5" /E
+	```
+
+Using the Calculator demo
+- Deploy: copy `Calculator/src/main/webapp` to your Tomcat webapps directory (e.g., `webapps/calc`)
+- Visit: http://localhost:8080/calc/
+
+Stopping services
+- Tomcat (macOS/Homebrew): `brew services stop tomcat@10`
+- Tomcat (Linux/Windows): stop the process (or use `bin/shutdown.sh`)
+- MySQL (Docker): `docker stop mysql-3308` (and `docker rm mysql-3308` to remove)
+
+Troubleshooting
+- Servlet compile errors: ensure your classpath points to Tomcat 10’s `lib/servlet-api.jar` (Jakarta packages)
+- Port in use: change Tomcat or Docker port mappings if 8080/3308 are busy
+- DB connection issues: ensure Docker is running and `scripts/mysql_up.sh` completed successfully
+
+-------------------------------------------------------------------------------
+What’s included in this repo
+-------------------------------------------------------------------------------
+- Experiment 5 (JSP/Servlets + MySQL) — full-stack example you just ran
+- Calculator (static webapp)
+- Additional Java experiments (collections, lambdas, JDBC, serialization)
+
+Enjoy exploring and extending!
