@@ -66,6 +66,71 @@ macOS or Linux
 That’s it. The app is running entirely locally.
 
 -------------------------------------------------------------------------------
+Which modules are full-stack vs non full-stack
+-------------------------------------------------------------------------------
+
+Full-stack (Tomcat + MySQL)
+- Experiment 5 — Student Marks (JSP/Servlets + DB). DB: module2.studentMarks
+- Experiment 6 — Employees (JSP + DB). DB: module2.employees
+- Experiment 7 — Login (Servlets + DB). DB: project.register
+- labsheet5 — Marks (Servlets + DB). DB: god.mark
+- module/Project With All Components — All-in-one form (Servlet + DB). DB: allCompo.allCompo
+- module/Student Registration Form — Registration (Servlet + DB). DB: module1.StudentRegistrationForm
+
+Web-only (no DB)
+- LoginForm — echo login details
+- labsheet7 — Login flow with in-memory password check (no DB)
+- Calculator — static HTML/CSS demo
+
+Console-only (no Tomcat)
+- Experiment 1 — Serialization/Deserialization
+- Experiment 2 — Comparators/sorting
+- Experiment 4 — Lambdas/sorting
+- EXPERIMENT 3 (JDBC CLI) — requires DB employee.emp but runs from console
+- insert_data_into_database — simple JDBC insert (jdbc_db.student)
+- module/experiment_one, experiment_two, experimentFour — console variants
+- module/experimentThree — JDBC CLI; DB employee.emp
+- serializationAndDeseralization — serialization demo
+
+All required databases/tables for full-stack modules are auto-created by `scripts/mysql_up.sh`.
+
+-------------------------------------------------------------------------------
+Run any full-stack webapp
+-------------------------------------------------------------------------------
+
+Prereqs: Tomcat running (see quick start step 2) and MySQL bootstrapped (step 3).
+
+macOS/Linux (deploy to Tomcat)
+- Experiment 5: `bash scripts/exp5_build_deploy.sh` → http://localhost:8080/exp5/
+- Experiment 6: `bash scripts/webapp_build_deploy.sh "EXPERIMENT 6" exp6` → http://localhost:8080/exp6/
+- Experiment 7: `bash scripts/webapp_build_deploy.sh "EXPERIMENT 7" exp7` → http://localhost:8080/exp7/
+- labsheet5: `bash scripts/webapp_build_deploy.sh "labsheet5" lab5` → http://localhost:8080/lab5/
+- Project With All Components: `bash scripts/webapp_build_deploy.sh "module/Project With All Components" allcompo` → http://localhost:8080/allcompo/
+- Student Registration Form: `bash scripts/webapp_build_deploy.sh "module/Student Registration Form" sreg` → http://localhost:8080/sreg/
+- LoginForm (no DB): `bash scripts/webapp_build_deploy.sh "LoginForm" loginform` → http://localhost:8080/loginform/
+- labsheet7 (no DB): `bash scripts/webapp_build_deploy.sh "labsheet7" lab7` → http://localhost:8080/lab7/
+- Calculator (static): `bash scripts/webapp_build_deploy.sh "Calculator" calc` → http://localhost:8080/calc/
+
+Windows PowerShell
+- Use: `powershell -ExecutionPolicy Bypass -File .\scripts\exp5_build_deploy.ps1 -TomcatHome "$env:CATALINA_HOME"` for Experiment 5
+- For others, manually deploy (copy the `src/main/webapp` folder) or use WSL to run the bash script
+
+-------------------------------------------------------------------------------
+Run console experiments
+-------------------------------------------------------------------------------
+
+Example (Experiment 4, Lambdas):
+```bash
+mkdir -p "EXPERIMENT 4/bin"
+javac -d "EXPERIMENT 4/bin" \
+	"EXPERIMENT 4/src/lambdaExperession/Student.java" \
+	"EXPERIMENT 4/src/lambdaExperession/exp4.java"
+java -cp "EXPERIMENT 4/bin" lambdaExperession.exp4
+```
+
+JDBC console experiments require `scripts/mysql_up.sh` (creates employee.emp and jdbc_db.student).
+
+-------------------------------------------------------------------------------
 Details and extras
 -------------------------------------------------------------------------------
 
